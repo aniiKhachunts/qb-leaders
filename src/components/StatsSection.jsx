@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
 
 function StatsSection() {
     const stats = [
@@ -65,39 +67,56 @@ function StatsSection() {
                 </motion.h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10 -mt-16">
-                    {stats.map((stat, i) => (
-                        <motion.div
-                            key={i}
-                            className="flex flex-col items-center justify-center"
-                            initial={{ opacity: 0, y: 40, scale: 0.8 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: i * 0.2 }}
-                        >
-                            {/* Floating and pulsing Circle */}
-                            <motion.div
-                                className="w-36 h-36 md:w-44 md:h-44 rounded-full flex items-center justify-center
-                           bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl mb-4"
-                                animate={{
-                                    y: [0, -8, 0],
-                                    scale: [1, 1.05, 1],
-                                    rotate: [0, 2, -2, 0],
-                                }}
-                                transition={{
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                }}
-                            >
-                <span className="text-4xl md:text-5xl font-bold text-white drop-shadow">
-                  <CountUp end={stat.value} duration={3} decimals={0} separator="," />
-                    {stat.suffix}
-                </span>
-                            </motion.div>
+                    {stats.map((stat, i) => {
+                        const [ref, inView] = useInView({ triggerOnce: true });
+                        const [startCount, setStartCount] = useState(false);
 
-                            <p className="text-lg font-medium text-white/90">{stat.label}</p>
-                        </motion.div>
-                    ))}
+                        useEffect(() => {
+                            if (inView) setStartCount(true);
+                        }, [inView]);
+
+                        return (
+                            <motion.div
+                                key={i}
+                                className="flex flex-col items-center justify-center"
+                                initial={{ opacity: 0, y: 40, scale: 0.8 }}
+                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: i * 0.2 }}
+                            >
+                                {/* Floating and pulsing Circle */}
+                                <motion.div
+                                    ref={ref}
+                                    className="w-36 h-36 md:w-44 md:h-44 rounded-full flex items-center justify-center
+                                        bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl mb-4"
+                                    animate={{
+                                        y: [0, -8, 0],
+                                        scale: [1, 1.05, 1],
+                                        rotate: [0, 2, -2, 0],
+                                    }}
+                                    transition={{
+                                        duration: 6,
+                                        repeat: Infinity,
+                                        ease: "easeInOut",
+                                    }}
+                                >
+                                    <span className="text-4xl md:text-5xl font-bold text-white drop-shadow">
+                                        {startCount && (
+                                            <CountUp
+                                                end={stat.value}
+                                                duration={3}
+                                                decimals={0}
+                                                separator=","
+                                            />
+                                        )}
+                                        {stat.suffix}
+                                    </span>
+                                </motion.div>
+
+                                <p className="text-lg font-medium text-white/90">{stat.label}</p>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

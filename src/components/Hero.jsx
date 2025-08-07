@@ -55,7 +55,7 @@ function Hero() {
             <div className="absolute w-64 sm:w-80 h-64 sm:h-80 bg-green-300 opacity-40 rounded-full blur-3xl -top-32 -left-32 animate-float-slow will-change-transform" />
             <div className="absolute w-72 sm:w-96 h-72 sm:h-96 bg-green-400 opacity-30 rounded-full blur-3xl bottom-0 -right-40 animate-float-slower will-change-transform" />
 
-            {/* Floating Icons - hidden on very small screens */}
+            {/* Floating Icons - Desktop scattered */}
             {icons.map(({ Icon, top, left, delay }, index) => (
                 <motion.div
                     key={index}
@@ -66,6 +66,7 @@ function Hero() {
                     <Icon />
                 </motion.div>
             ))}
+
 
             {/* Hero Content */}
             <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10 relative z-10 w-full">
@@ -98,7 +99,44 @@ function Hero() {
                         className="max-w-[220px] sm:max-w-sm md:max-w-md drop-shadow-xl"
                         loading="lazy"
                     />
+
+                    {/* Mobile Floating Icons Around Illustration */}
+                    <div className="absolute inset-0 sm:hidden pointer-events-none">
+                        <div className="relative w-[220px] h-[220px] mx-auto">
+                            {[
+                                { Icon: FaCalculator, top: "5%", left: "10%", delay: 0 },
+                                { Icon: FaChartLine, top: "70%", left: "5%", delay: 0.2 },
+                                { Icon: FaFileInvoiceDollar, top: "50%", left: "80%", delay: 0.4 },
+                                { Icon: FaMoneyBillWave, top: "20%", left: "75%", delay: 0.6 },
+                                { Icon: FaCoins, top: "75%", left: "65%", delay: 0.8 },
+                                { Icon: FaUniversity, top: "40%", left: "30%", delay: 1.0 },
+                            ].map(({ Icon, top, left, delay }, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute text-xl text-gray-700 opacity-80"
+                                    style={{ top, left }}
+                                    animate={{
+                                        x: [0, Math.random() * 12 - 6, Math.random() * 12 - 6, 0],
+                                        y: [0, Math.random() * 12 - 6, Math.random() * 12 - 6, 0],
+                                        scale: [1, 1.05, 0.95, 1],
+                                        rotate: [0, 10, -10, 0],
+                                    }}
+                                    transition={{
+                                        duration: 5 + Math.random() * 3,
+                                        repeat: Infinity,
+                                        ease: "easeInOut",
+                                        delay,
+                                    }}
+                                >
+                                    <Icon />
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+
                 </motion.div>
+
             </div>
         </section>
     );
