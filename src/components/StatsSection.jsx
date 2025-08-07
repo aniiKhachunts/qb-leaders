@@ -3,6 +3,50 @@ import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 
+const StatItem = ({ value, suffix, label, delay = 0 }) => {
+    const [ref, inView] = useInView({ triggerOnce: true });
+    const [startCount, setStartCount] = useState(false);
+
+    useEffect(() => {
+        if (inView) setStartCount(true);
+    }, [inView]);
+
+    return (
+        <motion.div
+            className="flex flex-col items-center justify-center"
+            initial={{ opacity: 0, y: 40, scale: 0.8 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay }}
+        >
+            <motion.div
+                ref={ref}
+                className="w-36 h-36 md:w-44 md:h-44 rounded-full flex items-center justify-center
+                    bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl mb-4"
+                animate={{
+                    y: [0, -8, 0],
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 2, -2, 0],
+                }}
+                transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+            >
+                <span className="text-4xl md:text-5xl font-bold text-white drop-shadow">
+                    {startCount && (
+                        <CountUp end={value} duration={3} decimals={0} separator="," />
+                    )}
+                    {suffix}
+                </span>
+            </motion.div>
+
+            <p className="text-lg font-medium text-white/90">{label}</p>
+        </motion.div>
+    );
+};
+
 function StatsSection() {
     const stats = [
         { value: 500, suffix: "+", label: "Happy Clients" },
@@ -14,7 +58,6 @@ function StatsSection() {
 
     return (
         <section className="relative pt-48 pb-24 bg-gradient-to-b from-green-600 via-green-700 to-green-800 overflow-hidden text-white">
-            {/* Top Wave */}
             <svg
                 className="absolute top-0 left-0 w-full h-[180px]"
                 xmlns="http://www.w3.org/2000/svg"
@@ -28,11 +71,9 @@ function StatsSection() {
                 ></path>
             </svg>
 
-            {/* Decorative blurred blobs */}
             <div className="absolute w-80 h-80 bg-green-500/30 rounded-full blur-3xl top-24 -left-20 animate-pulse"></div>
             <div className="absolute w-96 h-96 bg-green-400/20 rounded-full blur-3xl top-52 -right-32 animate-pulse"></div>
 
-            {/* Floating Particles */}
             {particles.map((_, i) => (
                 <motion.div
                     key={i}
@@ -67,56 +108,15 @@ function StatsSection() {
                 </motion.h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10 -mt-16">
-                    {stats.map((stat, i) => {
-                        const [ref, inView] = useInView({ triggerOnce: true });
-                        const [startCount, setStartCount] = useState(false);
-
-                        useEffect(() => {
-                            if (inView) setStartCount(true);
-                        }, [inView]);
-
-                        return (
-                            <motion.div
-                                key={i}
-                                className="flex flex-col items-center justify-center"
-                                initial={{ opacity: 0, y: 40, scale: 0.8 }}
-                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: i * 0.2 }}
-                            >
-                                {/* Floating and pulsing Circle */}
-                                <motion.div
-                                    ref={ref}
-                                    className="w-36 h-36 md:w-44 md:h-44 rounded-full flex items-center justify-center
-                                        bg-white/20 backdrop-blur-sm border border-white/30 shadow-xl mb-4"
-                                    animate={{
-                                        y: [0, -8, 0],
-                                        scale: [1, 1.05, 1],
-                                        rotate: [0, 2, -2, 0],
-                                    }}
-                                    transition={{
-                                        duration: 6,
-                                        repeat: Infinity,
-                                        ease: "easeInOut",
-                                    }}
-                                >
-                                    <span className="text-4xl md:text-5xl font-bold text-white drop-shadow">
-                                        {startCount && (
-                                            <CountUp
-                                                end={stat.value}
-                                                duration={3}
-                                                decimals={0}
-                                                separator=","
-                                            />
-                                        )}
-                                        {stat.suffix}
-                                    </span>
-                                </motion.div>
-
-                                <p className="text-lg font-medium text-white/90">{stat.label}</p>
-                            </motion.div>
-                        );
-                    })}
+                    {stats.map((stat, i) => (
+                        <StatItem
+                            key={i}
+                            value={stat.value}
+                            suffix={stat.suffix}
+                            label={stat.label}
+                            delay={i * 0.2}
+                        />
+                    ))}
                 </div>
             </div>
         </section>

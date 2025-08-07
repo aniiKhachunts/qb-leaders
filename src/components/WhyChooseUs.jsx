@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FaCheckCircle } from "react-icons/fa";
-import illustration from "../assets/business-illustration.png"; // your new B&W illustration
+import illustration from "../assets/business-illustration.png";
 
 function WhyChooseUs() {
     const benefits = [

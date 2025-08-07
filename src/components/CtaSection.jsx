@@ -1,23 +1,26 @@
 import { motion } from "framer-motion";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaPhoneAlt, FaBriefcase, FaTrophy } from "react-icons/fa";
 
 function SplitCTA() {
     const steps = [
-        { icon: "📞", title: "Contact Us" },
-        { icon: "💼", title: "Full-Service Accounting & Tax Care" },
-        { icon: "🏆", title: "Achieve Financial Confidence" },
+        { icon: <FaPhoneAlt />, title: "Contact Us" },
+        { icon: <FaBriefcase />, title: "Full-Service Accounting & Tax Care" },
+        { icon: <FaTrophy />, title: "Achieve Financial Confidence" },
+    ];
+
+    const positions = [
+        { x: 50, y: 350 },
+        { x: 200, y: 200 },
+        { x: 350, y: 50 },
     ];
 
     return (
         <section className="relative py-16 sm:py-20 bg-gray-50 overflow-hidden">
-            {/* Top angled divider */}
             <svg className="absolute top-0 left-0 w-full" viewBox="0 0 1440 100">
-                <path fill="#fff" d="M0,100 L1440,0 L1440,100 Z"/>
+                <path fill="#fff" d="M0,100 L1440,0 L1440,100 Z" />
             </svg>
 
-            <div
-                className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:grid md:grid-cols-2 items-center gap-12 lg:gap-16 relative z-10">
-                {/* LEFT COLUMN */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:grid md:grid-cols-2 items-center gap-12 lg:gap-16 relative z-10">
                 <div className="w-full">
                     <motion.h2
                         className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4"
@@ -56,7 +59,7 @@ function SplitCTA() {
                             type="submit"
                             className="flex items-center justify-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold transition whitespace-nowrap w-full sm:w-auto"
                         >
-                            Get Started <FaArrowRight className="ml-2"/>
+                            Get Started <FaArrowRight className="ml-2" />
                         </button>
                     </motion.form>
 
@@ -65,11 +68,8 @@ function SplitCTA() {
                     </p>
                 </div>
 
-                {/* RIGHT COLUMN - Responsive Stairway */}
                 <div className="relative flex justify-center items-center w-full md:h-[28rem] h-80 overflow-visible">
-                    {/* Stairway container with responsive scaling */}
                     <div className="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px]">
-                        {/* SVG Path */}
                         <svg className="absolute w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
                             <motion.path
                                 d="M 50 350 C 150 250, 250 150, 350 50"
@@ -84,49 +84,47 @@ function SplitCTA() {
                             />
                         </svg>
 
-                        {/* Steps */}
-                        {[
-                            { icon: "📞", title: "Contact Us", x: 50, y: 350 },
-                            { icon: "💼", title: "Full-Service Accounting & Tax Care", x: 200, y: 200 },
-                            { icon: "🏆", title: "Achieve Financial Confidence", x: 350, y: 50 },
-                        ].map((step, i) => (
-                            <motion.div
-                                key={i}
-                                className="absolute flex flex-col items-center text-center w-24 sm:w-28"
-                                style={{
-                                    left: `${(step.x / 400) * 100}%`,
-                                    top: `${(step.y / 400) * 100}%`,
-                                    transform: "translate(-50%, -50%)",
-                                }}
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: i * 0.2 }}
-                            >
-                                <div
-                                    className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full shadow-lg 
-            ${
-                                        i === 2
-                                            ? "bg-gradient-to-br from-emerald-500 to-emerald-400 text-white"
-                                            : "bg-gray-200 text-gray-700"
-                                    }`}
+                        {steps.map((step, i) => {
+                            const { x, y } = positions[i];
+
+                            return (
+                                <motion.div
+                                    key={i}
+                                    className="absolute flex flex-col items-center text-center w-24 sm:w-28"
+                                    style={{
+                                        left: `${(x / 400) * 100}%`,
+                                        top: `${(y / 400) * 100}%`,
+                                        transform: "translate(-50%, -50%)",
+                                    }}
+                                    initial={{ opacity: 0, scale: 0.5 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: i * 0.2 }}
                                 >
+                                    <div
+                                        className={`w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full shadow-lg ${
+                                            i === 0
+                                                ? "bg-gray-100 text-pink-600"
+                                                : i === 1
+                                                    ? "bg-gray-100 text-orange-900"
+                                                    : "bg-gradient-to-br from-green-500 to-green-400 text-white"
+                                        }`}
+                                    >
+
                                     <span className="text-xl sm:text-2xl">{step.icon}</span>
-                                </div>
-                                <p className="mt-2 text-xs sm:text-sm font-medium text-gray-700 leading-tight">
-                                    {step.title}
-                                </p>
-                            </motion.div>
-                        ))}
+                                    </div>
+                                    <p className="mt-2 text-xs sm:text-sm font-medium text-gray-700 leading-tight">
+                                        {step.title}
+                                    </p>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
-
-
             </div>
 
-            {/* Bottom angled divider */}
             <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100">
-                <path fill="#fff" d="M0,0 L1440,100 L0,100 Z"/>
+                <path fill="#fff" d="M0,0 L1440,100 L0,100 Z" />
             </svg>
         </section>
     );

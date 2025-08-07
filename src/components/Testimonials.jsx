@@ -23,24 +23,21 @@ function Testimonials() {
     const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
     const prev = () => setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
-    // Autoplay
     useEffect(() => {
         autoplayRef.current && clearInterval(autoplayRef.current);
         autoplayRef.current = setInterval(next, 4000);
         return () => clearInterval(autoplayRef.current);
     }, [current]);
 
-    // Handle screen resize
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Mobile offset calculation
     const [offset, setOffset] = useState(0);
     useEffect(() => {
-        if (!isMobile) return; // skip desktop
+        if (!isMobile) return;
 
         const containerWidth = containerRef.current?.offsetWidth || 0;
         const centerOffset = containerWidth / 2 - cardWidth / 2 - current * totalWidth;
@@ -106,7 +103,6 @@ function Testimonials() {
                         })}
                     </motion.div>
 
-                    {/* Navigation Buttons */}
                     <button
                         onClick={prev}
                         className="absolute left-2 sm:left-0 top-1/2 -translate-y-1/2 bg-gray-200/70 hover:bg-gray-300 p-2 sm:p-3 rounded-full transition"
@@ -121,7 +117,6 @@ function Testimonials() {
                     </button>
                 </div>
 
-                {/* Dots Navigation */}
                 <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
                     {testimonials.map((_, i) => (
                         <button

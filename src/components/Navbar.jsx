@@ -14,7 +14,6 @@ function Navbar() {
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-gray-200 shadow-md">
             <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                {/* Logo */}
                 <Link
                     to="/"
                     className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent tracking-tight"
@@ -23,7 +22,6 @@ function Navbar() {
                     QB Leaders
                 </Link>
 
-                {/* Desktop Nav */}
                 <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
                     {links.map((link, i) => {
                         const path = getPath(link);
@@ -49,7 +47,6 @@ function Navbar() {
                     })}
                 </ul>
 
-                {/* Mobile Menu Button */}
                 <button
                     onClick={toggleMenu}
                     className="md:hidden text-2xl text-gray-800 focus:outline-none"
@@ -59,7 +56,6 @@ function Navbar() {
                 </button>
             </div>
 
-            {/* Mobile Menu Dropdown */}
             {isOpen && (
                 <div className="md:hidden px-6 pb-4 bg-white shadow-md border-t border-gray-200">
                     <ul className="flex flex-col space-y-4 text-gray-800 font-medium">
