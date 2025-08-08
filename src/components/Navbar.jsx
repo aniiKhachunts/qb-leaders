@@ -112,6 +112,57 @@ function Navbar() {
                     {isOpen ? <FiX/> : <FiMenu/>}
                 </button>
             </div>
+
+            {isOpen && (
+                <div className="md:hidden px-6 pb-6">
+                    <ul className="space-y-4 text-gray-800 font-medium mt-4">
+                        {links.map((link) => {
+                            if (link === "Services") {
+                                return (
+                                    <li key="services">
+                                        <details className="group">
+                                            <summary className="cursor-pointer flex items-center justify-between hover:text-green-600">
+                                                Services
+                                                <FaChevronDown className="w-4 h-4 ml-1 transition-transform group-open:rotate-180" />
+                                            </summary>
+                                            <ul className="pl-4 mt-2 space-y-2">
+                                                {servicePages.map(({ name, path }) => (
+                                                    <li key={name}>
+                                                        <Link
+                                                            to={path}
+                                                            onClick={closeMenu}
+                                                            className="block text-sm hover:text-green-600"
+                                                        >
+                                                            {name}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </details>
+                                    </li>
+                                );
+                            }
+
+                            const path = getPath(link);
+                            const isActive = pathname === path;
+
+                            return (
+                                <li key={link}>
+                                    <Link
+                                        to={path}
+                                        onClick={closeMenu}
+                                        className={`block text-sm ${
+                                            isActive ? "text-green-600 font-semibold" : "hover:text-green-600"
+                                        }`}
+                                    >
+                                        {link}
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
         </nav>
     );
 }
