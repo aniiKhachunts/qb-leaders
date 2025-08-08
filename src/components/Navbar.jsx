@@ -44,9 +44,10 @@ function Navbar() {
                             return (
                                 <li key="services" className="relative group">
                                     <Menu as="div" className="relative">
-                                        <Menu.Button className="flex items-center gap-1 hover:text-green-600 focus-visible:outline-none">
+                                        <Menu.Button
+                                            className="flex items-center gap-1 hover:text-green-600 focus-visible:outline-none">
                                             Services
-                                            <FaChevronDown className="w-4 h-4" />
+                                            <FaChevronDown className="w-4 h-4"/>
                                         </Menu.Button>
                                         <Transition
                                             as={Fragment}
@@ -57,7 +58,8 @@ function Navbar() {
                                             leaveFrom="opacity-100 translate-y-0"
                                             leaveTo="opacity-0 translate-y-1"
                                         >
-                                            <Menu.Items className="absolute top-8 left-0 bg-white border rounded-md shadow-md w-56 z-50 py-2 focus-visible:outline-none">
+                                            <Menu.Items
+                                                className="absolute top-8 left-0 bg-white border rounded-md shadow-md w-56 z-50 py-2 focus-visible:outline-none">
                                                 {servicePages.map(({ name, path }) => (
                                                     <Menu.Item key={name}>
                                                         {({ active }) => (
@@ -100,42 +102,6 @@ function Navbar() {
                             </li>
                         );
                     })}
-
-                    <Menu as="div" className="relative">
-                        <Menu.Button
-                            className="flex items-center gap-1 hover:text-green-600 focus-visible:outline-none"
-                        >
-                            Services
-                            <FaChevronDown className="w-4 h-4" />
-                        </Menu.Button>
-
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Menu.Items className="absolute top-8 left-0 bg-white border rounded-md shadow-md w-56 z-50 py-2 focus-visible:outline-none">
-                                {servicePages.map(({ name, path }) => (
-                                    <Menu.Item key={name}>
-                                        {({ active }) => (
-                                            <Link
-                                                to={path}
-                                                className={`block px-4 py-2 text-sm ${
-                                                    active ? "bg-green-100 text-green-700" : ""
-                                                }`}
-                                            >
-                                                {name}
-                                            </Link>
-                                        )}
-                                    </Menu.Item>
-                                ))}
-                            </Menu.Items>
-                        </Transition>
-                    </Menu>
                 </ul>
 
                 <button
@@ -143,44 +109,9 @@ function Navbar() {
                     className="md:hidden text-2xl text-gray-800 focus:outline-none"
                     aria-label="Toggle menu"
                 >
-                    {isOpen ? <FiX /> : <FiMenu />}
+                    {isOpen ? <FiX/> : <FiMenu/>}
                 </button>
             </div>
-
-            {isOpen && (
-                <div className="md:hidden px-6 pb-4 bg-white shadow-md border-t border-gray-200">
-                    <ul className="flex flex-col space-y-4 text-gray-800 font-medium">
-                        {links.map((link, i) => {
-                            const path = getPath(link);
-                            const isActive = pathname === path;
-                            return (
-                                <li key={i}>
-                                    <Link
-                                        to={path}
-                                        onClick={closeMenu}
-                                        className={`block ${isActive ? "text-green-600 font-semibold" : "hover:text-green-600"}`}
-                                    >
-                                        {link}
-                                    </Link>
-                                </li>
-                            );
-                        })}
-
-                        <li className="mt-2 font-semibold">Services</li>
-                        {servicePages.map(({ name, path }) => (
-                            <li key={name}>
-                                <Link
-                                    to={path}
-                                    onClick={closeMenu}
-                                    className="block pl-4 text-sm hover:text-green-600"
-                                >
-                                    {name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </nav>
     );
 }
