@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
+import { Menu, Transition } from "@headlessui/react";
+import { FaChevronDown } from "react-icons/fa";
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { pathname } = useLocation();
-    const links = ["Home", "Services", "About", "Testimonials", "Contact"];
-    const getPath = (label) => (label === "Home" ? "/" : `/${label.toLowerCase()}`);
 
+    const links = ["Home", "Services", "Blog", "Contact"];
+    const servicePages = [
+        { name: "Bookkeeping", path: "/services/bookkeeping" },
+        { name: "Tax Advisory", path: "/services/tax-advisory" },
+        { name: "Payroll", path: "/services/payroll" },
+        { name: "QuickBooks Support", path: "/services/quickbooks-support" },
+    ];
+
+    const getPath = (label) => (label === "Home" ? "/" : `/${label.toLowerCase()}`);
     const toggleMenu = () => setIsOpen((prev) => !prev);
     const closeMenu = () => setIsOpen(false);
+
+    useEffect(() => {
+        document.body.style.scrollbarGutter = "stable";
+        return () => {
+            document.body.style.scrollbarGutter = "";
+        };
+    }, []);
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-gray-200 shadow-md">
@@ -22,8 +38,47 @@ function Navbar() {
                     QB Leaders
                 </Link>
 
-                <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
+                <ul className="hidden md:flex space-x-8 text-gray-800 font-medium items-center">
                     {links.map((link, i) => {
+                        if (link === "Services") {
+                            return (
+                                <li key="services" className="relative group">
+                                    <Menu as="div" className="relative">
+                                        <Menu.Button className="flex items-center gap-1 hover:text-green-600 focus-visible:outline-none">
+                                            Services
+                                            <FaChevronDown className="w-4 h-4" />
+                                        </Menu.Button>
+                                        <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-100"
+                                            enterFrom="opacity-0 translate-y-1"
+                                            enterTo="opacity-100 translate-y-0"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="opacity-100 translate-y-0"
+                                            leaveTo="opacity-0 translate-y-1"
+                                        >
+                                            <Menu.Items className="absolute top-8 left-0 bg-white border rounded-md shadow-md w-56 z-50 py-2 focus-visible:outline-none">
+                                                {servicePages.map(({ name, path }) => (
+                                                    <Menu.Item key={name}>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                to={path}
+                                                                className={`block px-4 py-2 text-sm ${
+                                                                    active ? "bg-green-100 text-green-700" : ""
+                                                                }`}
+                                                            >
+                                                                {name}
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                ))}
+                                            </Menu.Items>
+                                        </Transition>
+                                    </Menu>
+                                </li>
+                            );
+                        }
+
                         const path = getPath(link);
                         const isActive = pathname === path;
 
@@ -45,6 +100,42 @@ function Navbar() {
                             </li>
                         );
                     })}
+
+                    <Menu as="div" className="relative">
+                        <Menu.Button
+                            className="flex items-center gap-1 hover:text-green-600 focus-visible:outline-none"
+                        >
+                            Services
+                            <FaChevronDown className="w-4 h-4" />
+                        </Menu.Button>
+
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                        >
+                            <Menu.Items className="absolute top-8 left-0 bg-white border rounded-md shadow-md w-56 z-50 py-2 focus-visible:outline-none">
+                                {servicePages.map(({ name, path }) => (
+                                    <Menu.Item key={name}>
+                                        {({ active }) => (
+                                            <Link
+                                                to={path}
+                                                className={`block px-4 py-2 text-sm ${
+                                                    active ? "bg-green-100 text-green-700" : ""
+                                                }`}
+                                            >
+                                                {name}
+                                            </Link>
+                                        )}
+                                    </Menu.Item>
+                                ))}
+                            </Menu.Items>
+                        </Transition>
+                    </Menu>
                 </ul>
 
                 <button
@@ -67,15 +158,26 @@ function Navbar() {
                                     <Link
                                         to={path}
                                         onClick={closeMenu}
-                                        className={`block transition-colors duration-200 ${
-                                            isActive ? "text-green-600 font-semibold" : "hover:text-green-600"
-                                        }`}
+                                        className={`block ${isActive ? "text-green-600 font-semibold" : "hover:text-green-600"}`}
                                     >
                                         {link}
                                     </Link>
                                 </li>
                             );
                         })}
+
+                        <li className="mt-2 font-semibold">Services</li>
+                        {servicePages.map(({ name, path }) => (
+                            <li key={name}>
+                                <Link
+                                    to={path}
+                                    onClick={closeMenu}
+                                    className="block pl-4 text-sm hover:text-green-600"
+                                >
+                                    {name}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             )}
